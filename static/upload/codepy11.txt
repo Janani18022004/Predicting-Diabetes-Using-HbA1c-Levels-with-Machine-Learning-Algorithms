@@ -1,0 +1,51 @@
+from flask import Flask, render_template,request
+import mysql.connector
+
+
+app = Flask(__name__)
+app.config['DEBUG']
+
+
+@app.route("/")
+def homepage():
+    return render_template('index.html')
+@app.route("/AdminLogin")
+def AdminLogin():
+    return render_template('AdminLogin.html')
+@app.route("/NewUser")
+def NewUser():
+    return render_template('NewUser.html')
+@app.route("/UserLogin")
+def UserLogin():
+    return render_template('UserLogin.html')
+
+@app.route("/reg", methods=['GET', 'POST'])
+def reg():
+    if request.method == 'POST':
+        name = request.form['name']
+
+        Fname = request.form['Fname']
+        gender = request.form['radiobutton']
+
+        uname = request.form['uname']
+        passwo = request.form['pass']
+
+        conn = mysql.connector.connect(user='root', password='', host='localhost', database='1sampledb')
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO regtb VALUES ('" + name  + "','" + Fname + "','" + gender + "','" + uname + "','" + passwo + "') ")
+        conn.commit()
+        conn.close()
+        # return 'file register successfully'
+        return render_template('UserLogin.html')
+
+
+
+
+
+
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=True)
